@@ -1,4 +1,4 @@
-let score = 0;
+
 let mainContentEl = document.querySelector("#main-content");
 let questionsEl = document.querySelector("#questions");
 let choicesEl = document.querySelector("#choices");
@@ -11,31 +11,13 @@ startBtn.name = "startBtn";
 startBtn.style.textAlign = "center";
 btnTimer.appendChild(startBtn);
 
-let questionsCtr = 0;
-
-// This function starts the timer countdown
-var startTimer = function timer() {
-  let displayTimer = document.getElementById("timer");
-  const totalTime = 5;
-  let timeLeft = totalTime;
-  let timePassed = 0;
-
-  const timer = setInterval(() => {
-    timeLeft = totalTime - timePassed;
-    timePassed += 1;
-    displayTimer.innerHTML = "Time Remaining: " + timeLeft;
-    if (timeLeft < 1) {
-      clearInterval(timer);
-    }
-  }, 1000);
-};
 
 // Declaration of Questions
 const questionsObj = [
   {
     question: "Commonly used data types DO NOT include:",
-    choices: { 1: "strings", 2: "booleans", 3: "numbers", 4: "alerts" },
-    answer: "4",
+    choices: { 1: "alerts", 2: "booleans", 3: "numbers", 4: "strings" },
+    answer: "1",
   },
   {
     question: "The condition in an if / else statement in enclosed with _____.",
@@ -47,7 +29,52 @@ const questionsObj = [
     },
     answer: "3",
   },
+  {
+    question: "Arrays is Javascript can be used to store _____.",
+    choices: {
+      1: "numbers and strings",
+      2: "other arrays",
+      3: "booleans",
+      4: "all of the above",
+    },
+    answer: "4",
+  },
+  {
+    question: "String variables must be enclosed within _____ when being assigned to variables.",
+    choices: {
+      1: "commas",
+      2: "quotes",
+      3: "curly brackets",
+      4: "parentheses",
+    },
+    answer: "2",
+  },
 ];
+
+const lastQuestion = questionsObj.length - 1;
+let questionsCtr = 0;
+let score = 0;
+
+// This function starts the timer countdown
+var startTimer = function timer() {
+  let displayTimer = document.getElementById("timer");
+  const totalTime = 100;
+  let timeLeft = totalTime;
+  let timePassed = 0;
+
+  const timer = setInterval(() => {
+    timeLeft = totalTime - timePassed;
+    timePassed += 1;
+    displayTimer.innerHTML = "Time Remaining: " + timeLeft;
+    if (timeLeft < 1) {
+      clearInterval(timer);
+      score = 0;
+    }
+  }, 1000);
+  score = timeLeft;
+};
+
+
 
 // This function displays all the questions
 function displayQuestions() {
@@ -88,18 +115,31 @@ function displayQuestions() {
 }
 
 function checkAnswer(answer){
-  //console.log(questionsObj[questionsCtr].answer)
+  console.log(lastQuestion);
   if(answer === parseInt(questionsObj[questionsCtr].answer)){
     alert('correct');
   }else{
     alert('wrong');
+    displayScore();
   }
+
+  
+  if(questionsCtr <= lastQuestion){
+    questionsCtr++;
+    displayQuestions();
+  }
+ 
+}
+
+function displayScore(){
+  let result = document.getElementById('results');
+  result.innerHTML=`${score}`;
 }
 
 
 
 
 
-//timerBtn.addEventListener("click", startTimer);
+startBtn.addEventListener("click", startTimer);
 startBtn.addEventListener("click", displayQuestions);
 
