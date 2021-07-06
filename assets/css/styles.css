@@ -1,0 +1,14 @@
+.header {
+  display: flex;
+  justify-content: space-around;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.main-content {
+  /* display: flex; */
+  margin: 50px auto;
+}
