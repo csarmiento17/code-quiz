@@ -1,15 +1,17 @@
-let body = document.body;
+let score = 0;
 let mainContentEl = document.querySelector("#main-content");
 let questionsEl = document.querySelector("#questions");
 let choicesEl = document.querySelector("#choices");
-let btnTimer = document.getElementById("start-timer");
+let btnTimer = document.querySelector("#start-timer");
 
-let timerBtn = document.createElement("button");
-timerBtn.innerHTML = "Start Quiz";
-timerBtn.type = "button";
-timerBtn.name = "timerBtn";
-timerBtn.style.textAlign = "center";
-document.body.appendChild(timerBtn);
+let startBtn = document.createElement("button");
+startBtn.innerHTML = "Start Quiz";
+startBtn.type = "button";
+startBtn.name = "startBtn";
+startBtn.style.textAlign = "center";
+btnTimer.appendChild(startBtn);
+
+let questionsCtr = 0;
 
 // This function starts the timer countdown
 var startTimer = function timer() {
@@ -32,8 +34,8 @@ var startTimer = function timer() {
 const questionsObj = [
   {
     question: "Commonly used data types DO NOT include:",
-    choices: { 1: "strings", 2: "booleans", 3: "alerts", 4: "numbers" },
-    answer: "3",
+    choices: { 1: "strings", 2: "booleans", 3: "numbers", 4: "alerts" },
+    answer: "4",
   },
   {
     question: "The condition in an if / else statement in enclosed with _____.",
@@ -47,37 +49,57 @@ const questionsObj = [
   },
 ];
 
-//This function creates a choices
-var createChoices = function (obj) {};
 // This function displays all the questions
 function displayQuestions() {
+  //hide Start button
+  startBtn.style.display = 'none';
+
+  
   // variable to store the HTML output
   const output = [];
 
-  questionsObj.forEach((currQuestion, index) => {
+  //questionsObj.forEach((currQuestion, index) => {
     // variable to store the list of choices
     const choices = [];
 
-    // ...add an HTML radio button
-
-    for (number in currQuestion.choices) {
+    let q = questionsObj[questionsCtr];
+  
+    for (choice in q.choices) {
+    
       choices.push(
         `<div>
-          <button name="question${index}" >${number} ${currQuestion.choices[number]}</button>           
+          <button name="question${questionsCtr}" onclick='checkAnswer(${choice})'>${choice} ${q.choices[choice]}</button>           
         </div>
-     `
+        `
       );
     }
-
-    // add this question and its answers to the output
+    // add this question and its answers to the output 
     output.push(
-      `<div class="questions"> ${currQuestion.question} </div>
-      <div class="choices"> ${choices.join("")} </div>`
-    );
-  });
+      `
+        <div class="questions"> ${q.question} </div>
+        <div class="choices"> ${choices.join("")} </div>
+   
+      `);
+ // });
   // finally combine our output list into one string of HTML and put it on the page
+  
   mainContentEl.innerHTML = output.join("");
+
 }
 
+function checkAnswer(answer){
+  //console.log(questionsObj[questionsCtr].answer)
+  if(answer === parseInt(questionsObj[questionsCtr].answer)){
+    alert('correct');
+  }else{
+    alert('wrong');
+  }
+}
+
+
+
+
+
 //timerBtn.addEventListener("click", startTimer);
-timerBtn.addEventListener("click", displayQuestions);
+startBtn.addEventListener("click", displayQuestions);
+
