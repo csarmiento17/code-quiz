@@ -4,6 +4,7 @@ let choicesEl = document.querySelector("#choices");
 let answerEl = document.querySelector("#answer");
 let btnTimer = document.querySelector("#start-timer");
 let result = document.querySelector("#results");
+let highScoreEl = document.querySelector("#highscore");
 
 let startBtn = document.createElement("button");
 startBtn.innerHTML = "Start Quiz";
@@ -11,6 +12,11 @@ startBtn.type = "button";
 startBtn.name = "startBtn";
 startBtn.style.textAlign = "center";
 btnTimer.appendChild(startBtn);
+
+
+
+let submitScore = document.createElement("button");
+submitScore.textContent = "Submit";
 
 // Declaration of Questions
 const questionsObj = [
@@ -145,7 +151,7 @@ function displayResult(result) {
 function showScore(score) {
   questionsEl.style.display = "none";
   choicesEl.style.display = "none";
-  startBtn.style.display = "block";
+  //startBtn.style.display = "block";
   // let hideQ = document.getElementById("questions");
   // hideQ.style.display = "none";
 
@@ -161,9 +167,8 @@ function showScore(score) {
 
   let nameInput = document.createElement("input");
   nameInput.setAttribute("type", "text");
+  nameInput.setAttribute("id","nameId")
 
-  let submitScore = document.createElement("button");
-  submitScore.textContent = "Submit";
 
   scoreDiv.appendChild(scoreH1El);
   scoreDiv.appendChild(scoreResult);
@@ -174,8 +179,40 @@ function showScore(score) {
 }
 
 // Function to save the score
-function saveScore() {}
+function saveScore() {
+  let initials = document.getElementById('nameId').value;
+  
+  let existingData = localStorage.getItem('highscore');
+  let existing = existingData ? JSON.parse(existingData) : [];  
+  let newData = {score:score, name:initials}
+ 
+  
+	// Add new data to localStorage Array
+	existing.push(newData);
+  
+	// Save back to localStorage
+  localStorage.setItem('highscore', JSON.stringify(existing));
+  showHighScores();
+}
+
+//Function to show High Scores
+function showHighScores(){
+  let scoreH1El = document.createElement("h1");
+  let scoreList = document.createElement("div");
+
+  scoreH1El.textContent = 'High Score';
+
+  highScoreEl.appendChild(scoreH1El);
+  //highScoreEl.appendChild(scoreList);
+
+  let existingData = localStorage.getItem('highscore');
+  console.log(JSON.stringify(existingData));
+//   !existingData ? '' : existingData.forEach(element => {
+    
+//   });
+}
 
 // Event Listeners
 startBtn.addEventListener("click", startTimer);
 startBtn.addEventListener("click", displayQuestions);
+submitScore.addEventListener("click", saveScore);
