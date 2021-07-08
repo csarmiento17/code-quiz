@@ -5,6 +5,7 @@ let answerEl = document.querySelector("#answer");
 let btnTimer = document.querySelector("#start-timer");
 let result = document.querySelector("#results");
 let highScoreEl = document.querySelector("#highscore");
+let timerEl = document.querySelector("#timer");
 
 let startBtn = document.createElement("button");
 startBtn.innerHTML = "Start Quiz";
@@ -12,8 +13,6 @@ startBtn.type = "button";
 startBtn.name = "startBtn";
 startBtn.style.textAlign = "center";
 btnTimer.appendChild(startBtn);
-
-
 
 let submitScore = document.createElement("button");
 submitScore.textContent = "Submit";
@@ -25,16 +24,16 @@ const questionsObj = [
     choices: { 1: "alerts", 2: "booleans", 3: "numbers", 4: "strings" },
     answer: "1",
   },
-  {
-    question: "The condition in an if / else statement in enclosed with _____.",
-    choices: {
-      1: "quotes",
-      2: "curly brackets",
-      3: "parentheses",
-      4: "square brackets",
-    },
-    answer: "3",
-  },
+  // {
+  //   question: "The condition in an if / else statement in enclosed with _____.",
+  //   choices: {
+  //     1: "quotes",
+  //     2: "curly brackets",
+  //     3: "parentheses",
+  //     4: "square brackets",
+  //   },
+  //   answer: "3",
+  // },
   // {
   //   question: "Arrays is Javascript can be used to store _____.",
   //   choices: {
@@ -62,31 +61,24 @@ const lastQuestion = questionsObj.length - 1;
 let questionsCtr = 0;
 let totalTime = 100;
 let score = 0;
-let deductPoint = 0;
+let timer;
 
 // This function starts the timer countdown
 function startTimer() {
-  let displayTimer = document.getElementById("timer");
-
-  const timer = setInterval(() => {
-    totalTime = totalTime - (1 + deductPoint);
-    deductPoint = 0;
-
-    timePassed = deductPoint + 1;
-    score = totalTime;
-    displayTimer.innerHTML = "Time Remaining: " + totalTime;
+  timer = setInterval(() => {
+    totalTime -= 1;
+    timerEl.innerHTML = `Time: ${totalTime}`;
 
     if (totalTime < 1) {
       clearInterval(timer);
-      score = 0;
+      showScore();
+      score = totalTime;
     }
   }, 1000);
 }
 
 // This function displays all the questions
 function displayQuestions() {
-  //Element for holding the result of answer
-
   //hide Start button
   startBtn.style.display = "none";
 
@@ -96,22 +88,21 @@ function displayQuestions() {
   // variable to store the list of choices
   const choices = [];
 
-  let q = questionsObj[questionsCtr];
+  let question = questionsObj[questionsCtr];
 
-  for (choice in q.choices) {
+  for (choice in question.choices) {
     choices.push(
       `<div>
-          <button name="question${questionsCtr}" onclick='checkAnswer(${choice})'>${choice} ${q.choices[choice]}</button>           
+          <button name="question${questionsCtr}" onclick='checkAnswer(${choice})'>${choice} ${question.choices[choice]}</button>           
         </div>
         `
     );
   }
   // add this question and its answers to the output
   output.push(
-    `
-        <div class="questions"> ${q.question} </div>
+    `   <div class="questions"> ${question.question} </div>
         <div class="choices"> ${choices.join("")} </div>
-   
+  
       `
   );
 
@@ -120,41 +111,34 @@ function displayQuestions() {
 }
 
 function checkAnswer(answer) {
-  deductPoint = 0;
   if (answer === parseInt(questionsObj[questionsCtr].answer)) {
     displayResult("CORRECT");
-    // answerDisplay.textContent = "WRONG";
   } else {
     displayResult("WRONG");
-    deductPoint = 10;
+    totalTime -= 10;
+    score = totalTime;
+    timerEl.innerHTML = `Time: ${totalTime}`;
   }
 
   if (questionsCtr < lastQuestion) {
     questionsCtr++;
     displayQuestions();
   } else {
-    //clearInterval(startTimer);
+    clearTimeout(timer);
     showScore(score);
-    console.log("End of Code Quiz");
-
-    //displayFinalScore();
   }
 }
 
-function displayResult(result) {
-  //alert(result);
-  let answerDisplay = document.createElement("h4");
-  answerDisplay.textContent = result;
-  answerEl.appendChild(answerDisplay);
+function displayResult(ans) {
+  answerEl.innerHTML = ans;
+  setInterval(() => {
+    answerEl.innerHTML = "";
+  }, 1000);
 }
 
 function showScore(score) {
   questionsEl.style.display = "none";
   choicesEl.style.display = "none";
-  //startBtn.style.display = "block";
-  // let hideQ = document.getElementById("questions");
-  // hideQ.style.display = "none";
-
   let scoreDiv = document.createElement("div");
   let scoreH1El = document.createElement("h1");
   scoreH1El.innerHTML = "All done!";
@@ -167,8 +151,7 @@ function showScore(score) {
 
   let nameInput = document.createElement("input");
   nameInput.setAttribute("type", "text");
-  nameInput.setAttribute("id","nameId")
-
+  nameInput.setAttribute("id", "nameId");
 
   scoreDiv.appendChild(scoreH1El);
   scoreDiv.appendChild(scoreResult);
@@ -178,38 +161,36 @@ function showScore(score) {
   result.appendChild(scoreDiv);
 }
 
-// Function to save the score
+// Function to save the score to local storage
 function saveScore() {
-  let initials = document.getElementById('nameId').value;
-  
-  let existingData = localStorage.getItem('highscore');
-  let existing = existingData ? JSON.parse(existingData) : [];  
-  let newData = {score:score, name:initials}
- 
-  
-	// Add new data to localStorage Array
-	existing.push(newData);
-  
-	// Save back to localStorage
-  localStorage.setItem('highscore', JSON.stringify(existing));
+  let initials = document.getElementById("nameId").value;
+
+  let existingData = localStorage.getItem("highscore");
+  //console.log(JSON.parse(existingData));
+  let existing = existingData ? JSON.parse(existingData) : [];
+  let newData = { score: score, name: initials };
+
+  // Add new data to localStorage Array
+  existing.push(newData);
+
+  // Save back to localStorage
+  localStorage.setItem("highscore", JSON.stringify(existing));
   showHighScores();
 }
 
 //Function to show High Scores
-function showHighScores(){
+function showHighScores() {
+  let output = [];
   let scoreH1El = document.createElement("h1");
   let scoreList = document.createElement("div");
 
-  scoreH1El.textContent = 'High Score';
+  scoreH1El.textContent = "High Score";
 
   highScoreEl.appendChild(scoreH1El);
   //highScoreEl.appendChild(scoreList);
 
-  let existingData = localStorage.getItem('highscore');
+  let existingData = localStorage.getItem("highscore");
   console.log(JSON.stringify(existingData));
-//   !existingData ? '' : existingData.forEach(element => {
-    
-//   });
 }
 
 // Event Listeners
