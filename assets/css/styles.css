@@ -16,11 +16,12 @@ body,
   justify-content: space-around;
 }
 
-.container {
+#container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin: 0 auto;
 }
 .main-content {
   position: relative;

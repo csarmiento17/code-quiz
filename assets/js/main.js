@@ -1,3 +1,4 @@
+let containerEl = document.querySelector("#container");
 let mainContentEl = document.querySelector("#main-content");
 let welcomeEl = document.querySelector("#welcome-screen");
 let questionsEl = document.querySelector("#questions");
@@ -6,6 +7,7 @@ let answerEl = document.querySelector("#answer");
 let btnTimer = document.querySelector("#start-timer");
 let result = document.querySelector("#results");
 let highScoreEl = document.querySelector("#highscore");
+let displayHighScoreEl = document.querySelector("#display-highscore");
 let timerEl = document.querySelector("#timer");
 
 let startBtn = document.createElement("button");
@@ -95,7 +97,7 @@ function startTimer() {
   timer = setInterval(() => {
     totalTime -= 1;
     timerEl.innerHTML = `Time: ${totalTime}`;
-
+    score = totalTime;
     if (totalTime < 1) {
       clearInterval(timer);
       showScore();
@@ -156,10 +158,12 @@ function checkAnswer(answer) {
 }
 
 function displayResult(ans) {
+  console.log("Display result " + ans);
   answerEl.innerHTML = ans;
   setInterval(() => {
     answerEl.innerHTML = "";
   }, 1000);
+  containerEl.appendChild(answerEl);
 }
 
 function showScore(score) {
@@ -186,6 +190,7 @@ function showScore(score) {
   scoreDiv.appendChild(nameInput);
   scoreDiv.appendChild(submitScore);
   result.appendChild(scoreDiv);
+  containerEl.appendChild(result);
 }
 
 // Function to save the score to local storage
@@ -207,6 +212,7 @@ function saveScore() {
 
 function clearHighScore() {
   localStorage.setItem("highscore", []);
+  showHighScores();
 }
 //Function to show High Scores
 function showHighScores() {
@@ -216,27 +222,36 @@ function showHighScores() {
   let output = [];
   let scoreH1El = document.createElement("h1");
   let scoreList = document.createElement("div");
-  let tempList = "";
+  let tempList = [];
   scoreH1El.textContent = "High Score";
   highScoreEl.appendChild(scoreH1El);
+  highScoreEl.appendChild(scoreList);
 
   let scores = JSON.parse(localStorage.getItem("highscore"));
-  //console.log(JSON.parse(scores));
-  scores.forEach((item) => {
-    tempList += tempList.innerHTML = `${item.name} ${item.score} `;
-  });
-  result.innerHTML = tempList;
 
+  for (list in scores) {
+    console.log(scores[list].name);
+    // tempList.push(`
+    //   <div>${parseInt(list) + 1}. ${scores[list].name} - ${
+    //   scores[list].score
+    // }</div>
+    // `);
+  }
+  console.log(tempList);
+  //tempList.sort((a, b) => a.score - b.score);
+  highScoreEl.innerHTML = tempList.join("");
+
+  // Create Go Back button
   let goBack = document.createElement("button");
   goBack.textContent = "Go Back";
   goBack.className = "btn edit-btn";
   goBack.setAttribute("id", "goback");
-  goBack.setAttribute("onclick", "displayMainScreen");
+  //goBack.setAttribute("click", "displayMainScreen");
 
   highScoreEl.appendChild(goBack);
 
   highScoreEl.appendChild(clearScore);
-  highScoreEl.appendChild(scoreList);
+  //highScoreEl.appendChild(scoreList);
   mainContentEl.appendChild(highScoreEl);
 }
 
