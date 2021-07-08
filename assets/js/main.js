@@ -230,7 +230,7 @@ function showHighScores() {
   let scores = JSON.parse(localStorage.getItem("highscore"));
 
   for (list in scores) {
-    console.log(scores[list].name);
+    //console.log(scores[list].name);
     // tempList.push(`
     //   <div>${parseInt(list) + 1}. ${scores[list].name} - ${
     //   scores[list].score
