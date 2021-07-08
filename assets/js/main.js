@@ -1,4 +1,5 @@
 let mainContentEl = document.querySelector("#main-content");
+let welcomeEl = document.querySelector("#welcome-screen");
 let questionsEl = document.querySelector("#questions");
 let choicesEl = document.querySelector("#choices");
 let answerEl = document.querySelector("#answer");
@@ -14,8 +15,34 @@ startBtn.name = "startBtn";
 startBtn.style.textAlign = "center";
 btnTimer.appendChild(startBtn);
 
+function displayMainScreen() {
+  console.log("displayMainScreen called");
+  let welcomeScreen = document.createElement("h1");
+  welcomeScreen.textContent = "Coding Quiz Challenge";
+
+  let descriptionScreen = document.createElement("p");
+  descriptionScreen.textContent = `Try to answer the following code-related questions within the time
+  limit. Keep in mind that incorrect answers will penalize your score
+  time by tem seconds!`;
+
+  welcomeEl.appendChild(welcomeScreen);
+  welcomeEl.appendChild(descriptionScreen);
+}
+
 let submitScore = document.createElement("button");
 submitScore.textContent = "Submit";
+
+let goBack = document.createElement("button");
+goBack.textContent = "Go Back";
+goBack.className = "btn edit-btn";
+goBack.setAttribute("id", "goback");
+
+let clearScore = document.createElement("button");
+clearScore.textContent = "Clear High Scores";
+clearScore.className = "btn edit-btn";
+clearScore.setAttribute("id", "clearscore");
+
+displayMainScreen();
 
 // Declaration of Questions
 const questionsObj = [
@@ -100,9 +127,8 @@ function displayQuestions() {
   }
   // add this question and its answers to the output
   output.push(
-    `   <div class="questions"> ${question.question} </div>
-        <div class="choices"> ${choices.join("")} </div>
-  
+    `   <div id="questions"> ${question.question} </div>
+        <div id="choices"> ${choices.join("")} </div>
       `
   );
 
@@ -137,8 +163,9 @@ function displayResult(ans) {
 }
 
 function showScore(score) {
-  questionsEl.style.display = "none";
-  choicesEl.style.display = "none";
+  document.getElementById("questions").style.display = "none";
+  document.getElementById("choices").style.display = "none";
+
   let scoreDiv = document.createElement("div");
   let scoreH1El = document.createElement("h1");
   scoreH1El.innerHTML = "All done!";
@@ -178,22 +205,44 @@ function saveScore() {
   showHighScores();
 }
 
+function clearHighScore() {
+  localStorage.setItem("highscore", []);
+}
 //Function to show High Scores
 function showHighScores() {
+  // Hide result div
+  result.style.display = "none";
+
   let output = [];
   let scoreH1El = document.createElement("h1");
   let scoreList = document.createElement("div");
-
+  let tempList = "";
   scoreH1El.textContent = "High Score";
-
   highScoreEl.appendChild(scoreH1El);
-  //highScoreEl.appendChild(scoreList);
 
-  let existingData = localStorage.getItem("highscore");
-  console.log(JSON.stringify(existingData));
+  let scores = JSON.parse(localStorage.getItem("highscore"));
+  //console.log(JSON.parse(scores));
+  scores.forEach((item) => {
+    tempList += tempList.innerHTML = `${item.name} ${item.score} `;
+  });
+  result.innerHTML = tempList;
+
+  let goBack = document.createElement("button");
+  goBack.textContent = "Go Back";
+  goBack.className = "btn edit-btn";
+  goBack.setAttribute("id", "goback");
+  goBack.setAttribute("onclick", "displayMainScreen");
+
+  highScoreEl.appendChild(goBack);
+
+  highScoreEl.appendChild(clearScore);
+  highScoreEl.appendChild(scoreList);
+  mainContentEl.appendChild(highScoreEl);
 }
 
 // Event Listeners
 startBtn.addEventListener("click", startTimer);
 startBtn.addEventListener("click", displayQuestions);
 submitScore.addEventListener("click", saveScore);
+clearScore.addEventListener("click", clearHighScore);
+goBack.addEventListener("click", displayMainScreen);
