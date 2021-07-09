@@ -207,39 +207,24 @@ function saveScore() {
 
   // Save back to localStorage
   localStorage.setItem("highscore", JSON.stringify(existing));
-  showHighScores();
+  getScores();
+  displayScores();
+
 }
 
-function clearHighScore() {
-  localStorage.setItem("highscore", []);
-  showHighScores();
-}
 //Function to show High Scores
-function showHighScores() {
+function displayScores() {
   // Hide result div
   result.style.display = "none";
+  displayHighScoreEl.style.display ="block";
 
   let output = [];
-  let scoreH1El = document.createElement("h1");
+  //let scoreH1El = document.createElement("h1");
   let scoreList = document.createElement("div");
-  let tempList = [];
-  scoreH1El.textContent = "High Score";
-  highScoreEl.appendChild(scoreH1El);
+ 
+  // scoreH1El.textContent = "High Score";
+  // highScoreEl.appendChild(scoreH1El);
   highScoreEl.appendChild(scoreList);
-
-  let scores = JSON.parse(localStorage.getItem("highscore"));
-
-  for (list in scores) {
-    //console.log(scores[list].name);
-    // tempList.push(`
-    //   <div>${parseInt(list) + 1}. ${scores[list].name} - ${
-    //   scores[list].score
-    // }</div>
-    // `);
-  }
-  console.log(tempList);
-  //tempList.sort((a, b) => a.score - b.score);
-  highScoreEl.innerHTML = tempList.join("");
 
   // Create Go Back button
   let goBack = document.createElement("button");
@@ -255,6 +240,35 @@ function showHighScores() {
   mainContentEl.appendChild(highScoreEl);
 }
 
+function clearHighScore() {
+  localStorage.setItem("highscore", []);
+  getScores();
+}
+
+function getScores(){
+  let tempList = [];
+  let tempListEl = document.createElement('div');
+  
+  let data = localStorage.getItem("highscore")
+  data = data ? JSON.parse(data) :[];
+  if(data.length === 0){
+    console.log('getScores blank')
+    tempListEl.textContent="";
+    document.getElementById('scoreList').value = "";
+  }
+
+  data.sort((a , b ) =>{ return b.score - a.score  });  
+ 
+  for (list in data) {
+    tempList.push(`<div id="scoreList">
+    ${parseInt(list) + 1}. ${data[list].name} - ${data[list].score}
+    </div>`);
+  }
+  tempListEl.innerHTML = tempList.join("")
+  //data.length > 0 ? tempListEl.innerHTML = tempList.join("") : tempListEl.innerHTML = "";
+  highScoreEl.appendChild(tempListEl);
+  
+}
 // Event Listeners
 startBtn.addEventListener("click", startTimer);
 startBtn.addEventListener("click", displayQuestions);

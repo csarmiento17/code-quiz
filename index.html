@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Code Quiz</title>
     <link rel="stylesheet" href="./assets/css/styles.css" />
+   
   </head>
   <body>
     <div class="header">
@@ -20,16 +21,21 @@
         <div id="choices"></div>
 
         <div id="highscore"></div>
-        <div id="display-highscore"></div>
+        <div id="display-highscore" style="display: none;">
+          <h1>High Scores</h1>
+        </div>
       </div>
-      <!-- <button id="previous">Previous Question</button>
-      <button id="next">Next Question</button> -->
+      
       <hr style="margin-top: 50px" />
 
       <div id="results"></div>
       <div id="answer"></div>
-    </div>
-
+      </div>
+      <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          console.log("DOM ready!");
+        });
+      </script>
     <script src="./assets/js/main.js" />
   </body>
 </html>
