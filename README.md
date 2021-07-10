@@ -16,6 +16,6 @@ https://csarmiento17.github.io/code-quiz/
 
 
 
-![code quiz](./Assets/04-web-apis-homework-demo.gif)
+![code quiz](./Assets/quiz.png)
 
 
