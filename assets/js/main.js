@@ -209,22 +209,23 @@ function saveScore() {
   localStorage.setItem("highscore", JSON.stringify(existing));
   getScores();
   displayScores();
-
 }
 
-//Function to show High Scores
+//Function to show all the Scores
 function displayScores() {
   // Hide result div
   result.style.display = "none";
-  displayHighScoreEl.style.display ="block";
+  //displayHighScoreEl.style.display = "block";
 
   let output = [];
-  //let scoreH1El = document.createElement("h1");
+  let scoreH1El = document.createElement("h1");
   let scoreList = document.createElement("div");
- 
-  // scoreH1El.textContent = "High Score";
-  // highScoreEl.appendChild(scoreH1El);
+
+  scoreH1El.textContent = "High Score";
+  highScoreEl.appendChild(scoreH1El);
   highScoreEl.appendChild(scoreList);
+
+  //getScores();
 
   // Create Go Back button
   let goBack = document.createElement("button");
@@ -241,34 +242,44 @@ function displayScores() {
 }
 
 function clearHighScore() {
+  //console.log(scoreList.length());
+  // let clearScore = document.getElementById("scoreList");
+  // var textBoxes = document.querySelectorAll("[id^=scoreList]");
+  var e = document.querySelector("#scoreList");
+
+  //e.firstElementChild can be used.
+  var child = e.lastElementChild;
+  while (child) {
+    e.removeChild(child);
+    child = e.lastElementChild;
+  }
+
   localStorage.setItem("highscore", []);
   getScores();
 }
 
-function getScores(){
+// This functions get all the scores in descending order
+function getScores() {
   let tempList = [];
-  let tempListEl = document.createElement('div');
-  
-  let data = localStorage.getItem("highscore")
-  data = data ? JSON.parse(data) :[];
-  if(data.length === 0){
-    console.log('getScores blank')
-    tempListEl.textContent="";
-    document.getElementById('scoreList').value = "";
-  }
+  let tempListEl = document.createElement("div");
 
-  data.sort((a , b ) =>{ return b.score - a.score  });  
- 
+  let data = localStorage.getItem("highscore");
+  data = data ? JSON.parse(data) : [];
+
+  // Sort score in descending order
+  data.sort((a, b) => {
+    return b.score - a.score;
+  });
+
   for (list in data) {
     tempList.push(`<div id="scoreList">
     ${parseInt(list) + 1}. ${data[list].name} - ${data[list].score}
     </div>`);
   }
-  tempListEl.innerHTML = tempList.join("")
-  //data.length > 0 ? tempListEl.innerHTML = tempList.join("") : tempListEl.innerHTML = "";
+  tempListEl.innerHTML = tempList.join("");
   highScoreEl.appendChild(tempListEl);
-  
 }
+
 // Event Listeners
 startBtn.addEventListener("click", startTimer);
 startBtn.addEventListener("click", displayQuestions);
