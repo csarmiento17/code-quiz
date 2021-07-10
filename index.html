@@ -9,34 +9,20 @@
   </head>
   <body>
     <div class="header">
-      <div class="score">View High Score</div>
-      <div id="timer">Time: 100</div>
+      <div class="view-score" onclick="viewScore()">View Highscore</div>
+      <div id="timer">Time:</div>
     </div>
     <div id="container">
       <div id="main-content">
-        <div id="welcome-screen"></div>
-        <div id="start-timer" />
-        <!-- <div id="questions"></div>
-        <div id="choices"></div> -->
-
-        <div id="highscore">
-          <div id="scoreList"></div>
-        </div>
-        <!-- <div id="display-highscore" style="display: none">
-          <h1>High Scores!</h1>
-        </div> -->
+        <div id="welcome-screen"/>
+        <div id="highscore"/>
       </div>
 
-      <hr style="margin-top: 50px" />
-
-      <div id="results"></div>
-      <div id="answer"></div>
+      <div id="results"/>
+      <div id="answer"/>
     </div>
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        console.log("DOM ready!");
-      });
-    </script>
+   
+    
     <script src="./assets/js/main.js" />
   </body>
 </html>
