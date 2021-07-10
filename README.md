@@ -16,6 +16,6 @@ https://csarmiento17.github.io/code-quiz/
 
 
 
-![code quiz](./Assets/quiz.png)
+![code quiz](./assets/quiz.png)
 
 
