@@ -1,19 +1,20 @@
 let containerEl = document.querySelector("#container");
 let headerEl = document.querySelector(".header");
+let viewScoreEl = document.querySelector(".view-score");
 let mainContentEl = document.querySelector("#main-content");
 let welcomeEl = document.querySelector("#welcome-screen");
 let questionsEl = document.querySelector("#questions");
 let choicesEl = document.querySelector("#choices");
 let answerEl = document.querySelector("#answer");
-let btnTimer = document.querySelector("#start-timer");
 let resultEl = document.querySelector("#results");
 let highScoreEl = document.querySelector("#highscore");
 let scoreListEl = document.querySelector("#scoreList");
-let displayHighScoreEl = document.querySelector("#display-highscore");
 let timerEl = document.querySelector("#timer");
 let isQuizDone = true;
 
-
+viewScoreEl.addEventListener('click', viewScore);
+headerEl.appendChild(viewScoreEl);
+headerEl.appendChild(timerEl);
 
 
 let submitScore = document.createElement("button");
@@ -111,8 +112,6 @@ function startTimer() {
 
 // This function displays all the questions
 function displayQuestions() {
-  //hide Start button
-  //startBtn.style.display = "none";
 
   // variable to store the Questions output
   const output = [];
@@ -175,7 +174,7 @@ function displayResult(ans) {
   answerEl.innerHTML = `<div><hr><p>${ans}</p></div>`;
   setInterval(() => {
     answerEl.innerHTML = "";
-  }, 500);
+  }, 1000);
  
   containerEl.appendChild(answerEl);
 }
@@ -213,7 +212,7 @@ function saveScore() {
   let initials = document.getElementById("nameId").value;
 
   if(!initials){
-    initials = "No name"
+    initials = "No initials"
   }
   let existingData = localStorage.getItem("scores");
   //console.log(JSON.parse(existingData));
