@@ -1,4 +1,4 @@
-# 04 Web APIs: Code Quiz
+# Web APIs: Code Quiz
 
 ## Live URL
 https://csarmiento17.github.io/code-quiz/
